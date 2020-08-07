@@ -1,0 +1,33 @@
+import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
+import com.github.twitch4j.TwitchClient;
+import com.github.twitch4j.TwitchClientBuilder;
+
+public class TPArenaBot {
+
+    //TODO Have these take from some config
+//    private static String BOT_USERNAME;
+//    private static String OAUTH_TOKEN;
+//    private static String CHANNEL_NAME;
+
+    private String username;
+    private String oauth;
+    private String channelName;
+
+    public TPArenaBot (String username, String oauth, String channelName) {
+        this.username = username;
+        this.oauth = oauth;
+        this.channelName = channelName;
+    }
+
+    //Hardcoded for simplicity
+    public TwitchClient getTwitchClient (String username, String oauth, String channelName) {
+        OAuth2Credential chatAccount = new OAuth2Credential("tadashiipasu_bot", "dx2df2pwc3pwbyx5vma9zxlhn4h263");
+        return TwitchClientBuilder.builder()
+                .withEnableChat(true)
+                .withChatAccount(chatAccount)
+                .withDefaultAuthToken(chatAccount)
+                .build();
+    }
+
+
+}

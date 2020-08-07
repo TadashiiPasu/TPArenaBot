@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'com.github.twitch4j', name: 'twitch4j', version: '1.1.0'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+}
