@@ -3,9 +3,18 @@ package com.github.tadashiipasu.tparenabot;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.philippheuer.events4j.core.EventManager;
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
+import com.github.tadashiipasu.tparenabot.features.ResponseOnWhisper;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.github.tadashiipasu.tparenabot.features.ResponseOnMessage;
+import com.github.twitch4j.helix.domain.ChannelInformation;
+import com.github.twitch4j.helix.domain.ExtensionActiveList;
+import com.github.twitch4j.helix.domain.User;
+import com.github.twitch4j.helix.domain.UserList;
+import com.github.twitch4j.tmi.domain.Chatters;
+import com.netflix.hystrix.HystrixCommand;
+
+import java.util.Arrays;
 
 public class Bot {
 
@@ -30,7 +39,7 @@ public class Bot {
         TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
 
         //region Auth
-        OAuth2Credential chatAccount = new OAuth2Credential("tadashiipasu_bot", "dx2df2pwc3pwbyx5vma9zxlhn4h263");
+        OAuth2Credential chatAccount = new OAuth2Credential("tadashiipasu_bot", "wjyj56uyqouiqlc88izr7lsxxda9y1");
 
         //endregion
 
@@ -42,6 +51,7 @@ public class Bot {
                 .withEnableChat(true)
                 .withChatAccount(chatAccount)
                 .withEnableHelix(true)
+                .withEnableTMI(true)
                 /*
                  * Build the TwitchClient Instance
                  */
@@ -57,6 +67,19 @@ public class Bot {
 
         // Register Event-based com.github.tadashiipasu.tparenabot.features
         ResponseOnMessage responseOnMessage = new ResponseOnMessage(eventHandler);
+        ResponseOnWhisper responseOnWhisper = new ResponseOnWhisper(eventHandler);
+    }
+
+    public boolean userIsPresent(String username) {
+        Chatters chatters = twitchClient
+                .getMessagingInterface()
+                .getChatters("tadashiipasu")
+                .execute();
+        return chatters.getAllViewers().contains(username);
+    }
+
+    public TwitchClient getTwitchClient() {
+        return twitchClient;
     }
 
     /**
