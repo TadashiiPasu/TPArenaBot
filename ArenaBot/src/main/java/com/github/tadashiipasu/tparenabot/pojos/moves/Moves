@@ -1,0 +1,2 @@
+{"id":1,"level":1,"moveName":"Tackle","type":"Physical","damage":20,"accuracy":100,"status":null,"effect":null,"priority":false,"requiredStats":{"maxHealth":10,"currentHealth":10,"strength":10,"magic":10,"defense":10,"magicDefense":10,"accuracy":10,"evasion":10,"speed":10}}
+{"id":2,"level":1,"moveName":"Sprite Fire","type":"Magic","damage":20,"accuracy":100,"status":null,"effect":null,"priority":false,"requiredStats":{"maxHealth":10,"currentHealth":10,"strength":10,"magic":10,"defense":10,"magicDefense":10,"accuracy":10,"evasion":10,"speed":10}}

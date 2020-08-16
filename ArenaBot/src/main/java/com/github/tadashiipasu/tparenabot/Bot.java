@@ -78,6 +78,18 @@ public class Bot {
         return chatters.getAllViewers().contains(username);
     }
 
+    public String getUserId(String username) {
+        String userId = "";
+        UserList userList = twitchClient
+                .getHelix()
+                .getUsers(null, null, Arrays.asList(username))
+                .execute();
+        for (User user : userList.getUsers()) {
+            userId = user.getId();
+        }
+        return userId;
+    }
+
     public TwitchClient getTwitchClient() {
         return twitchClient;
     }
@@ -104,5 +116,4 @@ public class Bot {
         twitchClient.getChat().joinChannel("TadashiiPasu");
 
     }
-
 }
