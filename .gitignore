@@ -1,0 +1,6 @@
+/.gradle/
+/client.log
+/viewers/*.json
+/wanderers/*.json
+/ArenaBot/.gradle/
+/ArenaBot/build/
