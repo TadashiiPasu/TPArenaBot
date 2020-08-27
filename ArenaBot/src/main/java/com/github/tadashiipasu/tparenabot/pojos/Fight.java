@@ -2,10 +2,23 @@ package com.github.tadashiipasu.tparenabot.pojos;
 
 public class Fight {
     public String fightId;
-    public Wanderer wandererOne;
-    public Wanderer wandererTwo;
-    public boolean wandererOneReady;
-    public boolean wandererTwoReady;
+    public String wandererOneId;
+    public String wandererTwoId;
+    public Integer wandererOneMove;
+    public Integer wandererTwoMove;
+
+
+    public Fight(String fightId, String wandererOneId, String wandererTwoId, Integer wandererOneMove,
+                 Integer wandererTwoMove) {
+        this.fightId = fightId;
+        this.wandererOneId = wandererOneId;
+        this.wandererTwoId = wandererTwoId;
+        this.wandererOneMove = wandererOneMove;
+        this.wandererTwoMove = wandererTwoMove;
+    }
+
+    public Fight() {
+    }
 
     public String getFightId() {
         return fightId;
@@ -15,35 +28,51 @@ public class Fight {
         this.fightId = fightId;
     }
 
-    public Wanderer getWandererOne() {
-        return wandererOne;
+    public String getWandererOne() {
+        return wandererOneId;
     }
 
-    public void setWandererOne(Wanderer wandererOne) {
-        this.wandererOne = wandererOne;
+    public void setWandererOne(String wandererOne) {
+        this.wandererOneId = wandererOneId;
     }
 
-    public Wanderer getWandererTwo() {
-        return wandererTwo;
+    public String getWandererTwo() {
+        return wandererTwoId;
     }
 
-    public void setWandererTwo(Wanderer wandererTwo) {
-        this.wandererTwo = wandererTwo;
+    public void setWandererTwo(String wandererTwo) {
+        this.wandererTwoId = wandererTwo;
     }
 
-    public boolean isWandererOneReady() {
-        return wandererOneReady;
+    public String getWandererOneId() {
+        return wandererOneId;
     }
 
-    public void setWandererOneReady(boolean wandererOneReady) {
-        this.wandererOneReady = wandererOneReady;
+    public void setWandererOneId(String wandererOneId) {
+        this.wandererOneId = wandererOneId;
     }
 
-    public boolean isWandererTwoReady() {
-        return wandererTwoReady;
+    public String getWandererTwoId() {
+        return wandererTwoId;
     }
 
-    public void setWandererTwoReady(boolean wandererTwoReady) {
-        this.wandererTwoReady = wandererTwoReady;
+    public void setWandererTwoId(String wandererTwoId) {
+        this.wandererTwoId = wandererTwoId;
+    }
+
+    public Integer getWandererOneMove() {
+        return wandererOneMove;
+    }
+
+    public void setWandererOneMove(Integer wandererOneMove) {
+        this.wandererOneMove = wandererOneMove;
+    }
+
+    public Integer getWandererTwoMove() {
+        return wandererTwoMove;
+    }
+
+    public void setWandererTwoMove(Integer wandererTwoMove) {
+        this.wandererTwoMove = wandererTwoMove;
     }
 }

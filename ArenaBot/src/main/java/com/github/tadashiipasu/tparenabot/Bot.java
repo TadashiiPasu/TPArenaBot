@@ -90,6 +90,18 @@ public class Bot {
         return userId;
     }
 
+    public String getUsername(String userId) {
+        String username = "";
+        UserList userList = twitchClient
+                .getHelix()
+                .getUsers(null, Arrays.asList(userId), null)
+                .execute();
+        for (User user : userList.getUsers()) {
+            username = user.getDisplayName();
+        }
+        return username;
+    }
+
     public TwitchClient getTwitchClient() {
         return twitchClient;
     }

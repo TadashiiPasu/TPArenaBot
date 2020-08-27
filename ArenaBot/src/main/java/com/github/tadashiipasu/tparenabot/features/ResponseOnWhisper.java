@@ -6,6 +6,7 @@ import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import com.github.twitch4j.common.events.user.PrivateMessageEvent;
 
 public class ResponseOnWhisper {
+    private final FightHandler fightHandler = new FightHandler();
     /**
      * Register events of this class with the EventManager/EventHandler
      *
@@ -16,44 +17,30 @@ public class ResponseOnWhisper {
     }
 
     /**
-     * Subscribe to the Follow Event
+     * Subscribe to the Whisper Event
      */
     public void onWhisper(PrivateMessageEvent event) {
         String message;
         String privateMessage;
         String target;
+
+        if (event.getMessage().startsWith("~")) {
+            String[] commandStrip = event.getMessage().split(" ");
+            int moveIndex = Integer.parseInt(commandStrip[0].substring(1));
+            if (moveIndex > 0 && moveIndex < 5) {
+                sendPublic(fightHandler.updateFight(event.getUser().getId(), moveIndex));
+            }
+        }
+    }
+
+    public void sendPublic(String message) {
         Bot bot = new Bot();
-        bot.getTwitchClient().getChat().sendMessage("TadashiiPasu", String.format("%s responded with %s", event.getUser().getName(), event.getMessage()));
-//        if (event.getMessage().startsWith("~")) {
-//            String[] commmandStrip = event.getMessage().split(" ");
-//            switch(commmandStrip[0].toLowerCase()) {
-//                case "~register":
-//                    message = "You have been successfully registered!";
-//                    sendPublic(event, message);
-//                    break;
-//                case "~duel":
-//                    if (commmandStrip[1].startsWith("@")) {
-//                        target = commmandStrip[1].substring(1).toLowerCase();
-//                    } else {
-//                        target = commmandStrip[1].toLowerCase();
-//                    }
-//
-//                    if (userIsPresent(target)) {
-//                        privateMessage = String.format("%s has challenged you to a duel! Do you accept? (Yes/No)", event.getUser().getName());
-//                        sendPrivateChallenge(event, event.getUser().getName(), target, privateMessage);
-//                        message = String.format("A challenge to %s has been sent!", target);
-//                    } else {
-//                        message = String.format("%s is not currently here BibleThump", target);
-//                    }
-//                    sendPublic(event, message);
-//                    break;
-//                case "~test":
-//                    message = "/w TadashiiPasu This was sent via sendMessage";
-//                    privateMessage = "This was sent via sendPrivateMessage";
-//                    event.getTwitchChat().sendMessage("tadashiipasu", message);
-//                    event.getTwitchChat().sendPrivateMessage("tadashiipasu", privateMessage);
-//                    break;
-//            }
-//        }
+        if (message != null) {
+            bot.getTwitchClient().getChat().sendMessage("tadashiipasu", message);
+        }
+    }
+
+    public void sendPrivate(Bot bot, String message, String target) {
+        bot.getTwitchClient().getChat().sendPrivateMessage("tadashiipasu", message);
     }
 }

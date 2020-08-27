@@ -23,9 +23,10 @@ public class MoveHandler {
         List<Integer> usableMoves = getUsableMoves(wanderer);
         for (int i = 0; i < amount; i++) {
             int randomIndex = rand.nextInt(usableMoves.size());
-            if (!selectedMoves.contains(usableMoves.get(randomIndex))) {
-                selectedMoves.add(usableMoves.get(randomIndex));
+            while (selectedMoves.contains(usableMoves.get(randomIndex))) {
+                randomIndex = rand.nextInt(usableMoves.size());
             }
+            selectedMoves.add(usableMoves.get(randomIndex));
         }
         return selectedMoves;
     }
@@ -82,14 +83,14 @@ public class MoveHandler {
     private boolean checkRequirements(Wanderer wanderer, Move move) {
         boolean canLearn = false;
         if (wanderer.getLevel() >= move.getLevel() &&
-                wanderer.getStats().getMaxHealth() >= move.getRequiredStats().getMaxHealth() &&
-                wanderer.getStats().getStrength() >= move.getRequiredStats().getStrength() &&
-                wanderer.getStats().getMagic() >= move.getRequiredStats().getMagic() &&
-                wanderer.getStats().getDefense() >= move.getRequiredStats().getDefense() &&
-                wanderer.getStats().getMagicDefense() >= move.getRequiredStats().getMagicDefense() &&
-                wanderer.getStats().getAccuracy() >= move.getRequiredStats().getAccuracy() &&
-                wanderer.getStats().getEvasion() >= move.getRequiredStats().getEvasion() &&
-                wanderer.getStats().getSpeed() >= move.getRequiredStats().getSpeed()
+                wanderer.getOriginalStats().getMaxHealth() >= move.getRequiredStats().getMaxHealth() &&
+                wanderer.getOriginalStats().getStrength() >= move.getRequiredStats().getStrength() &&
+                wanderer.getOriginalStats().getMagic() >= move.getRequiredStats().getMagic() &&
+                wanderer.getOriginalStats().getDefense() >= move.getRequiredStats().getDefense() &&
+                wanderer.getOriginalStats().getMagicDefense() >= move.getRequiredStats().getMagicDefense() &&
+                wanderer.getOriginalStats().getAccuracy() >= move.getRequiredStats().getAccuracy() &&
+                wanderer.getOriginalStats().getEvasion() >= move.getRequiredStats().getEvasion() &&
+                wanderer.getOriginalStats().getSpeed() >= move.getRequiredStats().getSpeed()
         ) {
             canLearn = true;
         }

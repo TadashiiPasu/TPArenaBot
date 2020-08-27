@@ -1,6 +1,8 @@
 /.gradle/
 /client.log
+/fights/*.json
 /viewers/*.json
 /wanderers/*.json
 /ArenaBot/.gradle/
 /ArenaBot/build/
+/.idea/

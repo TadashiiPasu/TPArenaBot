@@ -4,30 +4,30 @@ import org.jetbrains.annotations.Nullable;
 
 @Nullable
 public class Effect {
-    @Nullable
     private String effectName;
     @Nullable
     private String stat;
     @Nullable
     private Integer amount;
-    @Nullable
     private Integer duration;
+    private String target;
 
-    public Effect(@Nullable String effectName, @Nullable String stat, @Nullable Integer amount, @Nullable Integer duration) {
+    public Effect(String effectName, @Nullable String stat, @Nullable Integer amount, Integer duration, String target) {
         this.effectName = effectName;
         this.stat = stat;
         this.amount = amount;
         this.duration = duration;
+        this.target = target;
     }
 
     public Effect(){
     }
 
-    public String getEffect() {
+    public String getEffectName() {
         return effectName;
     }
 
-    public void setEffect(String effectName) {
+    public void setEffectName(String effectName) {
         this.effectName = effectName;
     }
 
@@ -53,5 +53,13 @@ public class Effect {
 
     public void setDuration(@Nullable Integer duration) {
         this.duration = duration;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
     }
 }

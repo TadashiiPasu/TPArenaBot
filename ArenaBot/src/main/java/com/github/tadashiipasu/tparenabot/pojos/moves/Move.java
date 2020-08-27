@@ -3,25 +3,28 @@ package com.github.tadashiipasu.tparenabot.pojos.moves;
 import com.github.tadashiipasu.tparenabot.pojos.StatBlock;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class Move {
     private Integer id;
     private Integer level;
     private String moveName;
-    @Nullable
     private String type;
     @Nullable
     private Integer damage;
     @Nullable
     private Integer accuracy;
     @Nullable
-    private String status;
+    private Integer critChance;
+    @Nullable
+    private Map<String, Integer> status;
     @Nullable
     private Effect effect;
     private boolean priority;
     private StatBlock requiredStats;
 
-    public Move(Integer id, Integer level, String moveName, @Nullable String type, @Nullable Integer damage, @Nullable Integer accuracy, @Nullable String status,
-                @Nullable Effect effect, boolean priority, StatBlock requiredStats) {
+    public Move(Integer id, Integer level, String moveName, String type, @Nullable Integer damage, @Nullable Integer accuracy,
+                @Nullable Integer critChance, @Nullable Map<String, Integer> status, @Nullable Effect effect, boolean priority, StatBlock requiredStats) {
         this.id = id;
         this.level = level;
         this.moveName = moveName;
@@ -61,11 +64,11 @@ public class Move {
         this.moveName = moveName;
     }
 
-    public @Nullable String getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(@Nullable String type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -85,11 +88,19 @@ public class Move {
         this.accuracy = accuracy;
     }
 
-    public @Nullable String getStatus() {
+    public @Nullable Integer getCritChance() {
+        return critChance;
+    }
+
+    public void setCritChance(@Nullable Integer critChance) {
+        this.critChance = critChance;
+    }
+
+    public @Nullable Map<String, Integer> getStatus() {
         return status;
     }
 
-    public void setStatus(@Nullable String status) {
+    public void setStatus(@Nullable Map<String, Integer> status) {
         this.status = status;
     }
 
