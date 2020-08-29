@@ -2,15 +2,17 @@ package com.github.tadashiipasu.tparenabot.pojos;
 
 public class Fight {
     public String fightId;
+    public long fightStart;
     public String wandererOneId;
     public String wandererTwoId;
     public Integer wandererOneMove;
     public Integer wandererTwoMove;
 
 
-    public Fight(String fightId, String wandererOneId, String wandererTwoId, Integer wandererOneMove,
+    public Fight(String fightId, long fightStart, String wandererOneId, String wandererTwoId, Integer wandererOneMove,
                  Integer wandererTwoMove) {
         this.fightId = fightId;
+        this.fightStart = fightStart;
         this.wandererOneId = wandererOneId;
         this.wandererTwoId = wandererTwoId;
         this.wandererOneMove = wandererOneMove;
@@ -28,20 +30,12 @@ public class Fight {
         this.fightId = fightId;
     }
 
-    public String getWandererOne() {
-        return wandererOneId;
+    public long getFightStart() {
+        return fightStart;
     }
 
-    public void setWandererOne(String wandererOne) {
-        this.wandererOneId = wandererOneId;
-    }
-
-    public String getWandererTwo() {
-        return wandererTwoId;
-    }
-
-    public void setWandererTwo(String wandererTwo) {
-        this.wandererTwoId = wandererTwo;
+    public void setFightStart(long fightStart) {
+        this.fightStart = fightStart;
     }
 
     public String getWandererOneId() {

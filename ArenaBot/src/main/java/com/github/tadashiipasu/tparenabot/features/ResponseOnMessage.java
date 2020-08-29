@@ -2,6 +2,9 @@ package com.github.tadashiipasu.tparenabot.features;
 
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 import com.github.tadashiipasu.tparenabot.Bot;
+import com.github.tadashiipasu.tparenabot.handlers.FightHandler;
+import com.github.tadashiipasu.tparenabot.handlers.ViewerHandler;
+import com.github.tadashiipasu.tparenabot.handlers.WandererHandler;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 
 import java.io.IOException;
@@ -42,7 +45,7 @@ public class ResponseOnMessage {
                         sendPublic(event, wandererHandler.sendStats(getUserId(commandStrip[1])));
                     }
                     break;
-                case "~moveslist":
+                case "~moves":
                     sendPublic(event, wandererHandler.sendMoveList(event.getUser().getId()));
                     break;
                 case "~moveinfo":
@@ -53,21 +56,30 @@ public class ResponseOnMessage {
                     sendPublic(event, fightHandler.fightInvite(event.getUser().getId(), commandStrip));
                     break;
                 case "~accept":
-                    try {
-                        sendPublic(event, fightHandler.fightStartup(event.getUser().getId()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    sendPublic(event, fightHandler.fightStartup(event.getUser().getId()));
                     break;
                 case "~reject":
                     sendPublic(event, fightHandler.fightCancel(event.getUser().getId()));
+                    break;
+                case "~sp":
+                    sendPublic(event, viewerHandler.getStreamPoints(event.getUser().getId()));
+                    break;
+                case "~checkout":
+                    sendPublic(event, viewerHandler.checkout(event.getUser().getName()));
+                    break;
+                case "~xp":
+                    if (commandStrip.length == 3) {
+                        sendPublic(event, wandererHandler.giveExperience(event.getUser().getName(), getUserId(convertForTwitch(commandStrip[1])), commandStrip[2]));
+                    } else {
+                        sendPublic(event, "Invalid arguments");
+                    }
                     break;
                 case "~help":
                     sendPublic(event, "To participate in Viewer vs Viewer battle, you must first register using the \"~register\" command. " +
                             "Afterwards you can then challenge other viewers who have registered by using the \"~duel\" command!");
                     break;
                 case "~commands":
-                    sendPublic(event, "~register, ~stats, ~moveslist, ~moveinfo <moveNumber>, ~duel <target>");
+                    sendPublic(event, "~register, ~stats, ~moves, ~moveinfo <moveNumber>, ~duel <target>, ~sp");
                     break;
                 case "~test":
                     sendPrivate(event, "PRIVMSG #jtv :.w tadashiipasu HeyGuys", "tadashiipasu");
@@ -101,5 +113,15 @@ public class ResponseOnMessage {
     private String getUserId(String username) {
         Bot bot = new Bot();
         return bot.getUserId(username);
+    }
+
+    private String convertForTwitch(String rawUser) {
+        String target;
+        if (rawUser.startsWith("@")) {
+            target = rawUser.substring(1).toLowerCase();
+        } else {
+            target = rawUser.toLowerCase();
+        }
+        return target;
     }
 }

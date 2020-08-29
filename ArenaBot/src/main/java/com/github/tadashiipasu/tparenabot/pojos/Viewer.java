@@ -4,12 +4,14 @@ public class Viewer {
     private String username;
     private String userId;
     private Integer streamPoints;
+    private boolean checkedIn;
     private StatBlock stats;
 
-    public Viewer(String username, String userId, Integer streamPoints, StatBlock stats) {
+    public Viewer(String username, String userId, Integer streamPoints, boolean checkedIn, StatBlock stats) {
         this.username = username;
         this.userId = userId;
         this.streamPoints = streamPoints;
+        this.checkedIn = checkedIn;
         this.stats = stats;
     }
 
@@ -38,6 +40,14 @@ public class Viewer {
 
     public void setStreamPoints(Integer streamPoints) {
         this.streamPoints = streamPoints;
+    }
+
+    public boolean isCheckedIn() {
+        return checkedIn;
+    }
+
+    public void setCheckedIn(boolean checkedIn) {
+        this.checkedIn = checkedIn;
     }
 
     public StatBlock getStats() {

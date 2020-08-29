@@ -1,7 +1,10 @@
-package com.github.tadashiipasu.tparenabot.pojos;
+package com.github.tadashiipasu.tparenabot.pojos.builders;
+
+import com.github.tadashiipasu.tparenabot.pojos.Fight;
 
 public class FightBuilder {
     private String fightId;
+    private long fightStart;
     private String wandererOneId;
     private String wandererTwoId;
     public Integer wandererOneMove;
@@ -9,6 +12,11 @@ public class FightBuilder {
 
     public FightBuilder setFightId(String username) {
         this.fightId = username;
+        return this;
+    }
+
+    public FightBuilder setFightStart(long fightStart) {
+        this.fightStart = fightStart;
         return this;
     }
 
@@ -33,6 +41,6 @@ public class FightBuilder {
     }
 
     public Fight build() {
-        return new Fight(fightId, wandererOneId, wandererTwoId, wandererOneMove, wandererTwoMove);
+        return new Fight(fightId, fightStart, wandererOneId, wandererTwoId, wandererOneMove, wandererTwoMove);
     }
 }

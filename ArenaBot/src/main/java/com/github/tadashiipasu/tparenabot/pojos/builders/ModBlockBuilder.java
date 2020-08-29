@@ -1,4 +1,6 @@
-package com.github.tadashiipasu.tparenabot.pojos;
+package com.github.tadashiipasu.tparenabot.pojos.builders;
+
+import com.github.tadashiipasu.tparenabot.pojos.ModBlock;
 
 public class ModBlockBuilder {
     private String strength;

@@ -3,6 +3,7 @@ package com.github.tadashiipasu.tparenabot.pojos.moves;
 import com.github.tadashiipasu.tparenabot.pojos.StatBlock;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 
 public class Move {
@@ -19,12 +20,12 @@ public class Move {
     @Nullable
     private Map<String, Integer> status;
     @Nullable
-    private Effect effect;
+    private List<Effect> effect;
     private boolean priority;
     private StatBlock requiredStats;
 
     public Move(Integer id, Integer level, String moveName, String type, @Nullable Integer damage, @Nullable Integer accuracy,
-                @Nullable Integer critChance, @Nullable Map<String, Integer> status, @Nullable Effect effect, boolean priority, StatBlock requiredStats) {
+                @Nullable Integer critChance, @Nullable Map<String, Integer> status, @Nullable List<Effect> effect, boolean priority, StatBlock requiredStats) {
         this.id = id;
         this.level = level;
         this.moveName = moveName;
@@ -104,11 +105,11 @@ public class Move {
         this.status = status;
     }
 
-    public @Nullable Effect getEffect() {
+    public @Nullable List<Effect> getEffect() {
         return effect;
     }
 
-    public void setEffect(@Nullable Effect effect) {
+    public void setEffect(@Nullable List<Effect> effect) {
         this.effect = effect;
     }
 

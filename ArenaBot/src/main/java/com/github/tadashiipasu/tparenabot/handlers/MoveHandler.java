@@ -1,4 +1,4 @@
-package com.github.tadashiipasu.tparenabot.features;
+package com.github.tadashiipasu.tparenabot.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tadashiipasu.tparenabot.pojos.Wanderer;
@@ -43,7 +43,9 @@ public class MoveHandler {
                 Move move = mapper.readValue(line, Move.class);
                 if(wanderer != null) {
                     if (checkRequirements(wanderer, move)) {
-                        usableMoves.add(move.getId());
+                        if (!wanderer.getMoves().contains(move.getId())) {
+                            usableMoves.add(move.getId());
+                        }
                     }
                 } else {
                     if (move.getLevel() == 1) {

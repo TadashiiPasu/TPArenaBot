@@ -1,8 +1,9 @@
-package com.github.tadashiipasu.tparenabot.features;
+package com.github.tadashiipasu.tparenabot.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tadashiipasu.tparenabot.Bot;
 import com.github.tadashiipasu.tparenabot.pojos.*;
+import com.github.tadashiipasu.tparenabot.pojos.builders.FightBuilder;
 import com.github.tadashiipasu.tparenabot.pojos.moves.Effect;
 import com.github.tadashiipasu.tparenabot.pojos.moves.Move;
 import com.github.tadashiipasu.tparenabot.pojos.moves.Status;
@@ -18,11 +19,11 @@ import java.util.Random;
 public class FightHandler {
     private final String fightFilePath = "./fights";
 
-    private final Bot bot = new Bot();
     private final WandererHandler wandererHandler = new WandererHandler();
     private final MoveHandler moveHandler = new MoveHandler();
 
     public String fightInvite(String challengerId, String[] commandStrip) {
+        Bot bot = new Bot();
         String target;
         if (commandStrip.length < 2) {
             return "To duel someone, you need to add their name! i.e: ~duel TadashiiPasu";
@@ -69,7 +70,7 @@ public class FightHandler {
         }
     }
 
-    public String fightStartup(String challengedId) throws IOException {
+    public String fightStartup(String challengedId) {
         Wanderer challengedWanderer = wandererHandler.getWanderer(challengedId);
         Wanderer challengerWanderer = wandererHandler.getWanderer(challengedWanderer.getOpponentId());
         String fightId = challengedWanderer.getOpponentId() + challengedWanderer.getUserId();
@@ -149,12 +150,12 @@ public class FightHandler {
         StringBuilder combatLog = new StringBuilder();
         if (wandererOneMovesFirst(wandererOne, wandererTwo, moveOne, moveTwo)) {
             combatLog.append(determineHit(wandererOne, moveOne, wandererTwo));
-            if (wandererTwo.getOriginalStats().getCurrentHealth() > 0) {
+            if (wandererTwo.getAdjustedStats().getCurrentHealth() > 0) {
                 combatLog.append(determineHit(wandererTwo, moveTwo, wandererOne));
             }
         } else {
             combatLog.append(determineHit(wandererTwo, moveTwo, wandererOne));
-            if (wandererOne.getOriginalStats().getCurrentHealth() > 0) {
+            if (wandererOne.getAdjustedStats().getCurrentHealth() > 0) {
                 combatLog.append(determineHit(wandererOne, moveOne, wandererTwo));
             }
         }
@@ -176,6 +177,7 @@ public class FightHandler {
                 .setFightId(fightId)
                 .setWandererOneId(challengerId)
                 .setWandererTwoId(challengedId)
+                .setFightStart(System.currentTimeMillis())
                 .setWandererOneMove(0)
                 .setWandererTwoMove(0)
                 .build();
@@ -200,9 +202,9 @@ public class FightHandler {
     private boolean wandererOneMovesFirst(Wanderer wandererOne, Wanderer wandererTwo, Move moveOne, Move moveTwo) {
         Random rand = new Random();
         if (moveOne.isPriority() && moveTwo.isPriority()) {
-            if (wandererOne.getOriginalStats().getSpeed() > wandererTwo.getOriginalStats().getSpeed()) {
+            if (wandererOne.getAdjustedStats().getSpeed() > wandererTwo.getAdjustedStats().getSpeed()) {
                 return true;
-            } else if (wandererTwo.getOriginalStats().getSpeed() > wandererOne.getOriginalStats().getSpeed()) {
+            } else if (wandererTwo.getAdjustedStats().getSpeed() > wandererOne.getAdjustedStats().getSpeed()) {
                 return false;
             } else {
                 return rand.nextInt() % 2 == 0;
@@ -211,9 +213,9 @@ public class FightHandler {
             return true;
         } else if (moveTwo.isPriority()) {
             return false;
-        } else if (wandererOne.getOriginalStats().getSpeed() > wandererTwo.getOriginalStats().getSpeed()) {
+        } else if (wandererOne.getAdjustedStats().getSpeed() > wandererTwo.getAdjustedStats().getSpeed()) {
             return true;
-        } else if (wandererTwo.getOriginalStats().getSpeed() > wandererOne.getOriginalStats().getSpeed()) {
+        } else if (wandererTwo.getAdjustedStats().getSpeed() > wandererOne.getAdjustedStats().getSpeed()) {
             return false;
         } else {
             return rand.nextInt() % 2 == 0;
@@ -273,31 +275,33 @@ public class FightHandler {
                                 getStatusLabel(move.getStatus()),
                                 attacker.getUsername(),
                                 move.getMoveName()));
-                    } else {
+                    } else if (move.getDamage() == null){
                         combatLog.append(String.format("D: Oh no! %s's attack missed! ",
                                 attacker.getUsername()));
                     }
                 }
                 if (move.getEffect() != null) {
-                    List<Effect> currentEffects;
-                    if (move.getEffect().getTarget().equals("Self")) {
-                        if (attacker.getEffect() == null) {
-                            currentEffects = new ArrayList<>();
+                    for (Effect effect : move.getEffect()) {
+                        List<Effect> currentEffects;
+                        if (effect.getTarget().equals("Self")) {
+                            if (attacker.getEffect() == null) {
+                                currentEffects = new ArrayList<>();
+                            } else {
+                                currentEffects = attacker.getEffect();
+                            }
+                            combatLog.append(statAdjust(attacker, effect, move.getMoveName()));
+                            currentEffects.add(effect);
+                            attacker.setEffect(currentEffects);
                         } else {
-                            currentEffects = attacker.getEffect();
+                            if (defender.getEffect() == null) {
+                                currentEffects = new ArrayList<>();
+                            } else {
+                                currentEffects = defender.getEffect();
+                            }
+                            combatLog.append(statAdjust(defender, effect, move.getMoveName()));
+                            currentEffects.add(effect);
+                            defender.setEffect(currentEffects);
                         }
-                        combatLog.append(statAdjust(attacker, move.getEffect(), move.getMoveName()));
-                        currentEffects.add(move.getEffect());
-                        attacker.setEffect(currentEffects);
-                    } else {
-                        if (defender.getEffect() == null) {
-                            currentEffects = new ArrayList<>();
-                        } else {
-                            currentEffects = attacker.getEffect();
-                        }
-                        combatLog.append(statAdjust(defender, move.getEffect(), move.getMoveName()));
-                        currentEffects.add(move.getEffect());
-                        defender.setEffect(currentEffects);
                     }
                 }
             } else {
@@ -333,7 +337,7 @@ public class FightHandler {
                     if (effect.getAmount() != null) {
                         StatBlock damageApplied = wanderer.getAdjustedStats();
                         damageApplied.setCurrentHealth(damageApplied.getCurrentHealth() - effect.getAmount());
-                        wanderer.setOriginalStats(damageApplied);
+                        wanderer.setAdjustedStats(damageApplied);
                         combatLog.append(String.format("%s has been hurt by the %s for %d damage. ",
                                 wanderer.getUsername(),
                                 effect.getEffectName(),
@@ -525,7 +529,7 @@ public class FightHandler {
 
     private String determineVictor(Fight fight, Wanderer wandererOne, Wanderer wandererTwo) {
         StringBuilder combatLog = new StringBuilder();
-        if (wandererOne.getOriginalStats().getCurrentHealth() < 1 && wandererTwo.getOriginalStats().getCurrentHealth() < 1) {
+        if (wandererOne.getAdjustedStats().getCurrentHealth() < 1 && wandererTwo.getAdjustedStats().getCurrentHealth() < 1) {
             updateFight(fight.wandererOneId, -1);
             updateFight(fight.wandererTwoId, -1);
             combatLog.append(String.format("Through a cruel twist of fate, " +
@@ -533,8 +537,9 @@ public class FightHandler {
                             "May they walk the Righteous Path once more",
                     wandererOne.getUsername(),
                     wandererTwo.getUsername()));
-        } else if (wandererOne.getOriginalStats().getCurrentHealth() < 1) {
+        } else if (wandererOne.getAdjustedStats().getCurrentHealth() < 1) {
             updateFight(fight.wandererOneId, -1);
+            wandererHandler.calculateExperience(wandererTwo, wandererOne);
             wandererTwo.setDueling(false);
             wandererTwo.setOpponentId("");
             wandererTwo.setStatus(null);
@@ -545,8 +550,9 @@ public class FightHandler {
                             "May you continue along the Righteous Path",
                     wandererTwo.getUsername(),
                     wandererOne.getUsername()));
-        } else if (wandererTwo.getOriginalStats().getCurrentHealth() < 1) {
+        } else if (wandererTwo.getAdjustedStats().getCurrentHealth() < 1) {
             updateFight(fight.wandererTwoId, -1);
+            wandererHandler.calculateExperience(wandererOne, wandererTwo);
             wandererOne.setChallenger(false);
             wandererOne.setDueling(false);
             wandererOne.setOpponentId("");

@@ -1,5 +1,8 @@
-package com.github.tadashiipasu.tparenabot.pojos;
+package com.github.tadashiipasu.tparenabot.pojos.builders;
 
+import com.github.tadashiipasu.tparenabot.pojos.ModBlock;
+import com.github.tadashiipasu.tparenabot.pojos.StatBlock;
+import com.github.tadashiipasu.tparenabot.pojos.Wanderer;
 import com.github.tadashiipasu.tparenabot.pojos.moves.Effect;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +18,7 @@ public class WandererBuilder {
     private StatBlock adjustedStats;
     private ModBlock modifiers;
     private List<Integer> moves;
+    private Integer levelupMove;
     @Nullable
     private Map<String, Integer> status;
     @Nullable
@@ -64,6 +68,11 @@ public class WandererBuilder {
         return this;
     }
 
+    public WandererBuilder setLevelupMove(Integer levelupMove) {
+        this.levelupMove = levelupMove;
+        return this;
+    }
+
     public WandererBuilder setStatus(Map<String, Integer> status) {
         this.status = status;
         return this;
@@ -95,6 +104,6 @@ public class WandererBuilder {
     }
 
     public Wanderer build() {
-        return new Wanderer(username, userId, level, experience, originalStats, adjustedStats, modifiers, moves, status, effect, challenger, challenged, dueling, opponentId);
+        return new Wanderer(username, userId, level, experience, originalStats, adjustedStats, modifiers, moves, levelupMove, status, effect, challenger, challenged, dueling, opponentId);
     }
 }

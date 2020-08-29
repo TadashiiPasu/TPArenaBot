@@ -15,6 +15,7 @@ public class Wanderer {
     private StatBlock adjustedStats;
     private ModBlock modifiers;
     private List<Integer> moves;
+    private Integer levelupMove;
     @Nullable
     private Map<String, Integer> status;
     @Nullable
@@ -25,8 +26,9 @@ public class Wanderer {
     private String opponentId;
 
     public Wanderer(String username, String userId, Integer level, Integer experience, StatBlock originalStats,
-                    StatBlock adjustedStats, ModBlock modifiers, List<Integer> moves, @Nullable Map<String, Integer> status,
-                    @Nullable List<Effect> effect, boolean challenger, boolean challenged, boolean dueling, String opponentId) {
+                    StatBlock adjustedStats, ModBlock modifiers, List<Integer> moves, Integer levelupMove,
+                    @Nullable Map<String, Integer> status, @Nullable List<Effect> effect, boolean challenger,
+                    boolean challenged, boolean dueling, String opponentId) {
         this.username = username;
         this.userId = userId;
         this.level = level;
@@ -35,8 +37,10 @@ public class Wanderer {
         this.adjustedStats = adjustedStats;
         this.modifiers = modifiers;
         this.moves = moves;
+        this.levelupMove = levelupMove;
         this.status = status;
         this.effect = effect;
+        this.challenger = challenger;
         this.challenged = challenged;
         this.dueling = dueling;
         this.opponentId = opponentId;
@@ -107,6 +111,14 @@ public class Wanderer {
 
     public void setMoves(List<Integer> moves) {
         this.moves = moves;
+    }
+
+    public Integer getLevelupMove() {
+        return levelupMove;
+    }
+
+    public void setLevelupMove(Integer levelupMove) {
+        this.levelupMove = levelupMove;
     }
 
     public @Nullable Map<String, Integer> getStatus() {
